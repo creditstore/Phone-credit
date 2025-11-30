@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>دكان ماسكري للرصيد | Maskre Credit Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* Aurora-style animated background (more color) */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background:
+        radial-gradient(circle at 0% 0%, #f97316 0, transparent 40%),
+        radial-gradient(circle at 100% 0%, #22c55e 0, transparent 45%),
+        radial-gradient(circle at 50% 100%, #3b82f6 0, transparent 45%),
+        radial-gradient(circle at 50% 50%, #020617 0, #020617 70%);
+      background-size: 200% 200%;
+      animation: auroraBG 18s ease-in-out infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    @keyframes auroraBG {
+      0%   { background-position: 0% 0%; }
+      50%  { background-position: 100% 100%; }
+      100% { background-position: 0% 0%; }
+    }
+
+    body.dark {
+      background:
+        radial-gradient(circle at 0% 0%, #0ea5e9 0, transparent 35%),
+        radial-gradient(circle at 100% 0%, #a855f7 0, transparent 40%),
+        radial-gradient(circle at 50% 100%, #facc15 0, transparent 45%),
+        radial-gradient(circle at 50% 50%, #020617 0, #020617 70%);
+    }
+
+    .app {
+      width: 100%;
+      max-width: 440px;
+      background: linear-gradient(145deg, #ffffffee, #e0f2feee);
+      border-radius: 24px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.55);
+      padding: 18px 20px 22px;
+      box-sizing: border-box;
+      animation: appFloat 0.9s ease-out;
+      backdrop-filter: blur(8px);
+      color: #020617;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body.dark .app {
+      background: radial-gradient(circle at top, #020617ee, #020617f5);
+      color: #e5e7eb;
+    }
+
+    @keyframes appFloat {
+      from { opacity: 0; transform: translateY(20px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    h1, h2 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    h1 { font-size: 24px; }
+    h2 { font-size: 20px; }
+
+    .screen {
+      display: none;
+      animation: screenIn 0.35s ease-out;
+    }
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes screenIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .top-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      background: rgba(15, 23, 42, 0.06);
+      color: #111827;
+      backdrop-filter: blur(4px);
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+
+    .top-btn:active {
+      transform: scale(0.96);
+    }
+
+    body.dark .top-btn {
+      background: rgba(15, 23, 42, 0.6);
+      color: #e5e7eb;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      margin-top: 16px;
+      border: none;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #22c55e, #3b82f6);
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(34, 197, 94, 0.5);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(37, 99, 235, 0.65);
+    }
+
+    .btn:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 6px 14px rgba(37, 99, 235, 0.4);
+      opacity: 0.9;
+    }
+
+    .btn.secondary {
+      background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+      color: #111827;
+      box-shadow: none;
+      margin-top: 10px;
+    }
+
+    body.dark .btn.secondary {
+      background: linear-gradient(135deg, #111827, #020617);
+      color: #e5e7eb;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    input[type="number"],
+    input[type="tel"] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid #d1d5db;
+      font-size: 16px;
+      box-sizing: border-box;
+      outline: none;
+      background: rgba(255, 255, 255, 0.9);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+    }
+
+    input[type="number"]:focus,
+    input[type="tel"]:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+      transform: translateY(-1px);
+    }
+
+    body.dark input[type="number"],
+    body.dark input[type="tel"] {
+      background: #020617;
+      border-color: #374151;
+      color: #e5e7eb;
+    }
+
+    .result {
+      margin-top: 16px;
+      padding: 12px;
+      background: linear-gradient(135deg, #f9fafb, #e0f2fe);
+      border-radius: 14px;
+      font-size: 16px;
+      text-align: center;
+      min-height: 40px;
+      white-space: pre-line;
+      box-shadow: 0 6px 16px rgba(148, 163, 184, 0.3);
+    }
+
+    body.dark .result {
+      background: linear-gradient(135deg, #020617, #0b1120);
+      color: #e5e7eb;
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.7);
+    }
+
+    .small-text {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    body.dark .small-text {
+      color: #9ca3af;
+    }
+
+    .error {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #b91c1c;
+      text-align: center;
+    }
+
+    .emoji {
+      font-size: 42px;
+      text-align: center;
+      margin-bottom: 8px;
+      animation: floatEmoji 2.2s ease-in-out infinite;
+    }
+
+    @keyframes floatEmoji {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-6px); }
+    }
+
+    /* Operator selection */
+    .operators {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+
+    .operator-card {
+      flex: 1;
+      border-radius: 16px;
+      padding: 8px 6px;
+      border: 2px solid transparent;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      background: linear-gradient(145deg, #f3f4f6, #e5e7eb);
+      transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 4px 10px rgba(148, 163, 184, 0.4);
+    }
+
+    .operator-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(148, 163, 184, 0.6);
+    }
+
+    .operator-card.selected {
+      border-color: #2563eb;
+      background: linear-gradient(145deg, #dbeafe, #bfdbfe);
+      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.6);
+    }
+
+    body.dark .operator-card {
+      background: linear-gradient(145deg, #020617, #020617);
+      border-color: #111827;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.7);
+    }
+    body.dark .operator-card.selected {
+      background: linear-gradient(145deg, #020617, #111827);
+      border-color: #38bdf8;
+      box-shadow: 0 8px 20px rgba(56, 189, 248, 0.7);
+    }
+
+    .operator-logo-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      object-fit: contain;
+      background: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .operator-name {
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    /* Loading overlay */
+    .loading-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      backdrop-filter: blur(6px);
+    }
+
+    .loading-overlay.active {
+      display: flex;
+    }
+
+    .loading-box {
+      background: #020617;
+      color: #e5e7eb;
+      padding: 16px 20px;
+      border-radius: 16px;
+      text-align: center;
+      min-width: 220px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.9);
+      animation: scaleIn 0.25s ease-out;
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 3px solid rgba(148, 163, 184, 0.4);
+      border-top-color: #22c55e;
+      border-right-color: #3b82f6;
+      animation: spin 0.75s linear infinite;
+      margin: 0 auto 10px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Loading overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+      <div class="loading-box">
+        <div class="spinner"></div>
+        <div id="loadingText">جاري تجهيز طلبك يا زول...</div>
+      </div>
+    </div>
+
+    <div class="top-bar">
+      <button class="top-btn" id="langToggle" onclick="toggleLang()">English</button>
+      <button class="top-btn" id="themeToggle" onclick="toggleDarkMode()">☾</button>
+    </div>
+
+    <!-- WELCOME SCREEN -->
+    <div id="welcomeScreen" class="screen active">
+      <div class="emoji">💳</div>
+      <h1 id="welcomeTitle">دكان ماسكري للرصيد</h1>
+      <p id="welcomeSubtitle" style="text-align:center;">
+        أهلاً بيك يا زول! هنا تحسب رصيدك سريع وبالراحة.
+      </p>
+      <button class="btn" id="getStartedBtn" onclick="goToMain()">إبدا</button>
+    </div>
+
+    <!-- MAIN SCREEN (AMOUNT -> CREDIT) -->
+    <div id="mainScreen" class="screen">
+      <h2 id="mainTitle">شراء رصيد</h2>
+
+      <label id="operatorLabel" for="amountInput">اختار الشبكة</label>
+      <div class="operators">
+        <div class="operator-card selected" id="cardZain" onclick="selectOperator('zain')">
+          <img
+            src="https://cdn.discordapp.com/attachments/1397198696860483764/1444598705658396683/IMG_1476.jpg?ex=692d4ae2&amp;is=692bf962&amp;hm=73c103380758069f87ca46fcee7fb57fd9bb73c0e902eb279999fa24029ef6e5&amp;"
+            alt="Zain"
+            class="operator-logo-img"
+          />
+          <div class="operator-name" id="operatorNameZain">زين</div>
+        </div>
+        <div class="operator-card" id="cardSudani" onclick="selectOperator('sudani')">
+          <img
+            src="https://cdn.discordapp.com/attachments/1397198696860483764/1444598706149265448/channels4_profile.jpg?ex=692d4ae2&amp;is=692bf962&amp;hm=fa814ca51f4876ae8e35ae889adb789d996c9ab4a68f19774d05c15fc2c47443&amp;"
+            alt="Sudani"
+            class="operator-logo-img"
+          />
+          <div class="operator-name" id="operatorNameSudani">سوداني</div>
+        </div>
+        <div class="operator-card" id="cardMtn" onclick="selectOperator('mtn')">
+          <img
+            src="https://cdn.discordapp.com/attachments/1397198696860483764/1444598706639867974/New-mtn-logo.jpg?ex=692d4ae3&amp;is=692bf963&amp;hm=d8fe4120f46cd3b39076871f9671878755d5098a14177b6e00a39993faa4657b&amp;"
+            alt="MTN"
+            class="operator-logo-img"
+          />
+          <div class="operator-name" id="operatorNameMtn">إم تي إن</div>
+        </div>
+      </div>
+
+      <label id="amountLabel" for="amountInput">أكتب المبلغ الدا عايز تدفعو (جنيه)</label>
+      <input
+        id="amountInput"
+        type="number"
+        min="0"
+        placeholder="مثال: 1000 ، 1200 ، 3500"
+        oninput="calculateCredit()"
+      />
+
+      <div class="result" id="resultBox">
+        أكتب المبلغ عشان يطلع ليك الرصيد البوصلك.
+      </div>
+
+      <button class="btn" id="orderButtonMain" onclick="goToOrder()">اطلب الرصيد</button>
+      <button class="btn secondary" id="backButtonMain" onclick="backToWelcome()">رجوع</button>
+      <p class="small-text" id="mainInfoText">
+        الرقم الظاهر هو الرصيد الكلي البوصلك بعد الخصم.
+      </p>
+    </div>
+
+    <!-- ORDER SCREEN (PHONE NUMBER) -->
+    <div id="orderScreen" class="screen">
+      <h2 id="orderTitle">إتمام الطلب</h2>
+      <div class="result" id="orderSummary">
+        لسه ما في طلب.
+      </div>
+
+      <label id="phoneLabel" for="phoneInput">الرقم لازم يبدأ بـ 09</label>
+      <input
+        id="phoneInput"
+        type="tel"
+        placeholder="مثال: 0912345678"
+      />
+      <p class="small-text" id="phoneHint">
+        أكتب رقمك كامل مع الصفر في البداية حسب الشبكة.
+      </p>
+      <div id="phoneError" class="error"></div>
+
+      <button class="btn" id="confirmButton" onclick="confirmOrder()">تأكيد الطلب وإرسال في واتساب</button>
+      <button class="btn secondary" id="backButtonOrder" onclick="backToMain()">رجوع</button>
+    </div>
+
+    <!-- THANK YOU SCREEN -->
+    <div id="thankYouScreen" class="screen">
+      <div class="emoji">✅</div>
+      <h2 id="thankYouTitle">شكراً لطلبك يا زول!</h2>
+      <p id="thankYouText" style="text-align:center;">
+        طلبك اتبعت في واتساب لماسْكري.<br>
+        أستنى تأكيد الرصيد في رقمك.
+      </p>
+      <button class="btn" id="ThankYouBackButton" onclick="backToWelcome()">رجوع للبداية</button>
+    </div>
+  </div>
+
+  <script>
+    let lastAmount = 0;
+    let lastCredit = 0;
+    let selectedOperator = "zain";
+    let currentLang = "ar";
+    let isDark = false;
+
+    const strings = {
+      en: {
+        appName: "Maskre Credit Store",
+        welcomeSubtitle: "Welcome! Quickly see how much phone credit you’ll get.",
+        getStarted: "Get Started",
+
+        buyCreditTitle: "Buy Credit",
+        operatorLabel: "Choose operator",
+        operatorZain: "Zain",
+        operatorSudani: "Sudani",
+        operatorMtn: "MTN",
+
+        amountLabel: "Enter how much you want to pay (SDG)",
+        amountPlaceholder: "e.g. 1000, 1200, 3500",
+        resultDefault: "Type an amount to see how much credit you'll receive.",
+        resultText: (credit) => `You will receive: ${credit} SDG credit.`,
+        orderButtonMain: "Order credit",
+        backButtonMain: "Back",
+        mainInfoText: "You’ll see only the total credit you receive.",
+
+        orderTitle: "Complete Order",
+        orderSummaryEmpty: "No order yet.",
+        confirmButton: "Confirm & send on WhatsApp",
+        backButtonOrder: "Back",
+
+        thankYouTitle: "Thank you for your order!",
+        thankYouText: "Your order was sent on WhatsApp to Maskre.\nWait for your credit confirmation.",
+        thankYouBackButton: "Back to start",
+
+        phoneErrorEmpty: "Please enter your phone number.",
+        phoneErrorDigits: "Phone number must contain digits only.",
+        phoneErrorLength: "Please check that the number length is correct.",
+        enterAmountFirst: "Enter the amount first before ordering.",
+        loadingText: "Preparing your order..."
+      },
+      ar: {
+        appName: "دكان ماسكري للرصيد",
+        welcomeSubtitle: "أهلاً بيك يا زول! هنا تحسب رصيدك سريع وبالراحة.",
+        getStarted: "إبدا",
+
+        buyCreditTitle: "شراء رصيد",
+        operatorLabel: "اختار الشبكة",
+        operatorZain: "زين",
+        operatorSudani: "سوداني",
+        operatorMtn: "إم تي إن",
+
+        amountLabel: "أكتب المبلغ الدا عايز تدفعو (جنيه)",
+        amountPlaceholder: "مثال: 1000 ، 1200 ، 3500",
+        resultDefault: "أكتب المبلغ عشان يطلع ليك الرصيد البوصلك.",
+        resultText: (credit) => `ح توصلك: ${credit} جنيه رصيد.`,
+        orderButtonMain: "اطلب الرصيد",
+        backButtonMain: "رجوع",
+        mainInfoText: "الرقم الظاهر هو الرصيد الكلي البوصلك بعد الخصم.",
+
+        orderTitle: "إتمام الطلب",
+        orderSummaryEmpty: "لسه ما في طلب.",
+        confirmButton: "تأكيد الطلب وإرسال في واتساب",
+        backButtonOrder: "رجوع",
+
+        thankYouTitle: "شكراً لطلبك يا زول!",
+        thankYouText: "طلبك اتبعت في واتساب لماسْكري.\nأستنى تأكيد الرصيد في رقمك.",
+        thankYouBackButton: "رجوع للبداية",
+
+        phoneErrorEmpty: "من فضلك أكتب رقمك.",
+        phoneErrorDigits: "الرقم لازم يكون أرقام بس.",
+        phoneErrorLength: "أتأكد إنو طول الرقم صاح.",
+        enterAmountFirst: "أكتب المبلغ أول قبل الطلب.",
+        loadingText: "جاري تجهيز طلبك يا زول..."
+      }
+    };
+
+    function getPrefixForOperator() {
+      if (selectedOperator === "sudani") return "01";
+      return "09"; // Zain + MTN
+    }
+
+    function updatePhoneTexts() {
+      const prefix = getPrefixForOperator();
+      const s = strings[currentLang];
+      const label = (currentLang === "ar")
+        ? `الرقم لازم يبدأ بـ ${prefix}`
+        : `Number must start with ${prefix}`;
+
+      document.getElementById("phoneLabel").textContent = label;
+      document.getElementById("phoneHint").textContent =
+        (currentLang === "ar")
+          ? "أكتب رقمك كامل مع الصفر في البداية حسب الشبكة."
+          : "Write your full number including the starting 0 and correct prefix.";
+      document.getElementById("phoneInput").placeholder =
+        (currentLang === "ar") ? "مثال: " + prefix + "12345678" : "e.g. " + prefix + "12345678";
+
+      document.getElementById("loadingText").textContent = s.loadingText;
+    }
+
+    function applyLanguage(lang) {
+      currentLang = lang;
+      const s = strings[lang];
+
+      document.documentElement.lang = lang;
+      document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
+
+      document.getElementById("welcomeTitle").textContent = s.appName;
+      document.getElementById("welcomeSubtitle").textContent = s.welcomeSubtitle;
+      document.getElementById("getStartedBtn").textContent = s.getStarted;
+
+      document.getElementById("mainTitle").textContent = s.buyCreditTitle;
+      document.getElementById("operatorLabel").textContent = s.operatorLabel;
+      document.getElementById("operatorNameZain").textContent = s.operatorZain;
+      document.getElementById("operatorNameSudani").textContent = s.operatorSudani;
+      document.getElementById("operatorNameMtn").textContent = s.operatorMtn;
+
+      document.getElementById("amountLabel").textContent = s.amountLabel;
+      document.getElementById("amountInput").placeholder = s.amountPlaceholder;
+
+      const resultBox = document.getElementById("resultBox");
+      if (!lastCredit || !lastAmount) {
+        resultBox.textContent = s.resultDefault;
+      } else {
+        resultBox.textContent = s.resultText(lastCredit);
+      }
+
+      document.getElementById("orderButtonMain").textContent = s.orderButtonMain;
+      document.getElementById("backButtonMain").textContent = s.backButtonMain;
+      document.getElementById("mainInfoText").textContent = s.mainInfoText;
+
+      document.getElementById("orderTitle").textContent = s.orderTitle;
+      if (!lastAmount || !lastCredit) {
+        document.getElementById("orderSummary").textContent = s.orderSummaryEmpty;
+      }
+
+      document.getElementById("confirmButton").textContent = s.confirmButton;
+      document.getElementById("backButtonOrder").textContent = s.backButtonOrder;
+
+      document.getElementById("thankYouTitle").textContent = s.thankYouTitle;
+      document.getElementById("thankYouText").textContent = s.thankYouText;
+      document.getElementById("ThankYouBackButton").textContent = s.thankYouBackButton;
+
+      const langToggle = document.getElementById("langToggle");
+      langToggle.textContent = (lang === "en") ? "عربي" : "English";
+
+      updatePhoneTexts();
+    }
+
+    function toggleLang() {
+      const newLang = currentLang === "en" ? "ar" : "en";
+      applyLanguage(newLang);
+    }
+
+    function toggleDarkMode() {
+      isDark = !isDark;
+      document.body.classList.toggle("dark", isDark);
+      const themeToggle = document.getElementById("themeToggle");
+      themeToggle.textContent = isDark ? "☀" : "☾";
+    }
+
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      const el = document.getElementById(id);
+      if (el) el.classList.add("active");
+    }
+
+    function goToMain() {
+      showScreen("mainScreen");
+    }
+
+    function backToWelcome() {
+      showScreen("welcomeScreen");
+    }
+
+    function backToMain() {
+      showScreen("mainScreen");
+    }
+
+    function selectOperator(op) {
+      selectedOperator = op;
+      document.getElementById("cardZain").classList.toggle("selected", op === "zain");
+      document.getElementById("cardSudani").classList.toggle("selected", op === "sudani");
+      document.getElementById("cardMtn").classList.toggle("selected", op === "mtn");
+      updatePhoneTexts();
+    }
+
+    function goToOrder() {
+      const s = strings[currentLang];
+
+      if (!lastAmount || !lastCredit) {
+        alert(s.enterAmountFirst);
+        return;
+      }
+
+      const opName = {
+        zain: s.operatorZain,
+        sudani: s.operatorSudani,
+        mtn: s.operatorMtn
+      }[selectedOperator];
+
+      const summary = document.getElementById("orderSummary");
+      summary.textContent =
+        `${opName}\n` +
+        `${s.amountLabel.replace("(SDG)", "").replace(" (جنيه)", "")}: ${lastAmount} SDG\n` +
+        `${s.resultText(lastCredit)}`;
+
+      document.getElementById("phoneError").textContent = "";
+      document.getElementById("phoneInput").value = "";
+
+      updatePhoneTexts();
+      showScreen("orderScreen");
+    }
+
+    function calculateCredit() {
+      const input = document.getElementById("amountInput");
+      const resultBox = document.getElementById("resultBox");
+      const amount = Number(input.value);
+      const s = strings[currentLang];
+
+      if (!amount || amount <= 0) {
+        lastAmount = 0;
+        lastCredit = 0;
+        resultBox.textContent = s.resultDefault;
+        return;
+      }
+
+      // 80% of payment, rounded to nearest 100
+      const rawCredit = amount * 0.8;
+      const creditRounded = Math.round(rawCredit / 100) * 100;
+
+      lastAmount = amount;
+      lastCredit = creditRounded;
+
+      resultBox.textContent = s.resultText(creditRounded);
+    }
+
+    function showLoadingOverlay(show) {
+      const overlay = document.getElementById("loadingOverlay");
+      if (show) overlay.classList.add("active");
+      else overlay.classList.remove("active");
+    }
+
+    function confirmOrder() {
+      const phoneInput = document.getElementById("phoneInput");
+      const errorBox = document.getElementById("phoneError");
+      const phone = phoneInput.value.trim();
+      const s = strings[currentLang];
+
+      if (!phone) {
+        errorBox.textContent = s.phoneErrorEmpty;
+        return;
+      }
+
+      if (!/^\d+$/.test(phone)) {
+        errorBox.textContent = s.phoneErrorDigits;
+        return;
+      }
+
+      if (phone.length < 8 || phone.length > 11) {
+        errorBox.textContent = s.phoneErrorLength;
+        return;
+      }
+
+      const requiredPrefix = getPrefixForOperator();
+      if (!phone.startsWith(requiredPrefix)) {
+        errorBox.textContent = (currentLang === "ar")
+          ? `الرقم لازم يبدأ بـ ${requiredPrefix}`
+          : `Number must start with ${requiredPrefix}`;
+        return;
+      }
+
+      errorBox.textContent = "";
+
+      const opName = {
+        zain: strings[currentLang].operatorZain,
+        sudani: strings[currentLang].operatorSudani,
+        mtn: strings[currentLang].operatorMtn
+      }[selectedOperator];
+
+      // Payment REQUEST text (with operator)
+      const message =
+        "طلب دفع لرصيد عميل:\n" +
+        "الشبكة: " + opName + "\n" +
+        "المبلغ المطلوب يدفعو: " + lastAmount + " SDG\n" +
+        "الرصيد البوصله بعد الدفع: " + lastCredit + " SDG\n" +
+        "رقم التلفون: " + phone + "\n\n" +
+        "مهم: الرصيد ما بنترسل إلا بعد ما يظهر التحويل في بنكك.";
+
+      const waNumber = "249908665849";
+      const waUrl =
+        "https://api.whatsapp.com/send?phone=" +
+        waNumber +
+        "&text=" +
+        encodeURIComponent(message);
+
+      // Show loading overlay, then open WhatsApp, then thank you
+      showLoadingOverlay(true);
+
+      setTimeout(() => {
+        window.open(waUrl, "_blank");
+        showLoadingOverlay(false);
+        showScreen("thankYouScreen");
+      }, 1500);
+    }
+
+    // Initialize in Arabic
+    applyLanguage("ar");
+  </script>
+</body>
+  </html>
